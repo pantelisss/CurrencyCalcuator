@@ -22,6 +22,10 @@ class Client: NSObject {
     
     static let sharedInstance = Client()
     
+    /// Retrieve available currencies
+    ///
+    /// - Parameter completion: A block which returns an array of available currency symbols (eg. "USD", "GBP" etc)
+    /// - Returns: DataRequest, caller is able to cancel the pending request
     func getAvailableCurrencies(completion: @escaping (_ currencies: [String]?, _ error :Error?) -> Void) -> DataRequest? {
         return Alamofire.request(Constants.apiUrl, method: .get).responseJSON { (response) in
             switch response.result {
@@ -39,12 +43,19 @@ class Client: NSObject {
                     completion(nil, ClientErrors.invalidResponse)
                     return
                 }
-                                
+                
                 completion(Array(rates.keys), nil)
             }
         }
     }
     
+    /// Get specific currencies and their values
+    ///
+    /// - Parameters:
+    ///   - base: The base currency
+    ///   - currencies: The requested currencies
+    ///   - completion: A block which returns a dictionary with the requested currencies
+    /// - Returns: DataRequest, caller is able to cancel the pending request
     func getCurrencies(base: String, currencies: [String], completion: @escaping (_ currencies: [String : Float]?, _ error :Error?) -> Void) -> DataRequest? {
         let params = ["symbols" : currencies]
         
