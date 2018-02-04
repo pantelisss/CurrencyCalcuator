@@ -9,7 +9,7 @@
 import UIKit
 
 class Calculator: NSObject {
-    weak var delegate: CalcuatorDelegate?
+    weak var delegate: CalculatorDelegate?
 
     private var activeOperation: String?
     private var firstNumberString: String?
@@ -131,6 +131,6 @@ class Calculator: NSObject {
     }
 }
 
-protocol CalcuatorDelegate: NSObjectProtocol {
+protocol CalculatorDelegate: NSObjectProtocol {
     func calculatorDidUpdateDisplayText(sender: Calculator, displayText: String);
 }
