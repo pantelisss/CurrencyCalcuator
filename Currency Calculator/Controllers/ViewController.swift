@@ -18,6 +18,7 @@ class ViewController: UIViewController, CalculatorDelegate {
     @IBOutlet weak var secondaryCurrencyButton: UIButton!
     
     private let calculator = Calculator()
+    private let animator = ActionSheetAnimator()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +70,10 @@ class ViewController: UIViewController, CalculatorDelegate {
     }
     
     @IBAction func primaryCurrencyButtonTapped(_ sender: Any) {
+        let currencyPickerVC = CurrencyPickerViewController(nibName: String(describing: CurrencyPickerViewController.self), bundle: nil)
+        currencyPickerVC.transitioningDelegate = animator
+        currencyPickerVC.modalPresentationStyle = .custom
+        present(currencyPickerVC, animated: true, completion: nil)
     }
 
     @IBAction func secondaryCurrencyButtonTapped(_ sender: Any) {
