@@ -29,6 +29,24 @@
                                     <blurEffect style="light"/>
                                 </vibrancyEffect>
                             </visualEffectView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZOQ-lO-boM">
+                                <rect key="frame" x="0.0" y="20" width="320" height="29"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wSd-dp-nLK">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="wSd-dp-nLK" firstAttribute="leading" secondItem="ZOQ-lO-boM" secondAttribute="leading" id="2xZ-tk-xxA"/>
+                                    <constraint firstItem="wSd-dp-nLK" firstAttribute="top" secondItem="ZOQ-lO-boM" secondAttribute="top" id="Cuf-Jk-Ggm"/>
+                                    <constraint firstAttribute="bottom" secondItem="wSd-dp-nLK" secondAttribute="bottom" id="k2q-ae-MqO"/>
+                                    <constraint firstAttribute="trailing" secondItem="wSd-dp-nLK" secondAttribute="trailing" id="uqF-91-elm"/>
+                                </constraints>
+                            </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="gTI-UI-buL">
                                 <rect key="frame" x="20" y="195.5" width="280" height="352.5"/>
                                 <subviews>
@@ -41,7 +59,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="b3L-yC-W9c" secondAttribute="height" multiplier="1:1" id="yNT-5T-Czk"/>
                                                 </constraints>
-                                                <state key="normal" title="ac">
+                                                <state key="normal" title="C">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
@@ -269,13 +287,17 @@
                             <constraint firstItem="m1k-ag-vpM" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="GUQ-Rn-mEJ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="gTI-UI-buL" secondAttribute="bottom" constant="20" id="HGp-z9-rzc"/>
                             <constraint firstAttribute="bottom" secondItem="m1k-ag-vpM" secondAttribute="bottom" id="HSZ-bS-8wQ"/>
+                            <constraint firstItem="ZOQ-lO-boM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Kgd-UO-brd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="m1k-ag-vpM" secondAttribute="trailing" id="Tk9-TQ-8Co"/>
                             <constraint firstItem="m1k-ag-vpM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iAF-Zj-lA4"/>
                             <constraint firstItem="gTI-UI-buL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="mRE-Ds-7MZ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ZOQ-lO-boM" secondAttribute="trailing" id="ncW-eN-H5c"/>
+                            <constraint firstItem="ZOQ-lO-boM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="ymU-6M-jgw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="primaryLabel" destination="wSd-dp-nLK" id="gDh-FZ-0rE"/>
                         <outletCollection property="digitButtons" destination="xUl-DE-ktP" collectionClass="NSMutableArray" id="DL9-ap-FK4"/>
                         <outletCollection property="digitButtons" destination="mSA-rY-XNo" collectionClass="NSMutableArray" id="ofz-BZ-GCc"/>
                         <outletCollection property="digitButtons" destination="tc8-OC-M3S" collectionClass="NSMutableArray" id="o6G-AH-GNg"/>
