@@ -13,6 +13,9 @@ class ViewController: UIViewController, CalculatorDelegate {
     @IBOutlet var digitButtons: [UIButton]!
     @IBOutlet var operationButtons: [UIButton]!
     @IBOutlet weak var primaryLabel: UILabel!
+    @IBOutlet weak var primaryCurrencyButton: UIButton!
+    @IBOutlet weak var secondaryLabel: UILabel!
+    @IBOutlet weak var secondaryCurrencyButton: UIButton!
     
     private let calculator = Calculator()
     
@@ -63,6 +66,12 @@ class ViewController: UIViewController, CalculatorDelegate {
         }
         
         calculator.processOperation(title)
+    }
+    
+    @IBAction func primaryCurrencyButtonTapped(_ sender: Any) {
+    }
+
+    @IBAction func secondaryCurrencyButtonTapped(_ sender: Any) {
     }
     
     // MARK: CalculatorDelegate
