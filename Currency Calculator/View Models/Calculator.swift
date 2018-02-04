@@ -101,9 +101,7 @@ class Calculator: NSObject {
     
     private func performEqualOperation() {
         if let first = firstNumberString, let op = activeOperation, let second = secondNumberString {
-            let equation = first + op + second
-            let expression = NSExpression(format: equation)
-            let result = expression.expressionValue(with: nil, context: nil) as! NSNumber
+            guard let result = calculate(firstOperand: first, secondOperand: second, operation: op) else {return}
             performClearOperation()
             firstNumberString = result.stringValue
         }
@@ -112,6 +110,24 @@ class Calculator: NSObject {
     private func performMathOperation(op: String) {
         performEqualOperation()
         activeOperation = op
+    }
+    
+    func calculate(firstOperand: String, secondOperand: String, operation: String) -> NSNumber? {
+        guard let first = Float(firstOperand) else {return nil}
+        guard let second = Float(secondOperand)  else {return nil}
+        
+        switch operation {
+        case "+":
+            return NSNumber(value: first + second)
+        case "-":
+            return NSNumber(value: first - second)
+        case "*":
+            return NSNumber(value: first * second)
+        case "/":
+            return NSNumber(value: first / second)
+        default:
+            return NSNumber(value: 0)
+        }
     }
 }
 
