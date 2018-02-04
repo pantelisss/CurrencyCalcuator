@@ -8,17 +8,20 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CalculatorDelegate {
 
     @IBOutlet var digitButtons: [UIButton]!
     @IBOutlet var operationButtons: [UIButton]!
+    @IBOutlet weak var primaryLabel: UILabel!
+    
+    private let calculator = Calculator()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        calculator.delegate = self
         setupUI()
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,15 +43,32 @@ class ViewController: UIViewController {
         for btn in operationButtons {
             btn.layer.cornerRadius = btn.frame.size.width / 2.0
         }
+        
+        primaryLabel.text = calculator.displayText
     }
     
     // MARK: Actions
     
     @IBAction func digitButtonTapped(_ sender: UIButton) {
+        guard let title = sender.title(for: .normal) else {
+            return
+        }
+        
+        calculator.processDigit(title)
     }
     
     @IBAction func operationButtonTapped(_ sender: UIButton) {
+        guard let title = sender.title(for: .normal) else {
+            return
+        }
+        
+        calculator.processOperation(title)
     }
     
+    // MARK: CalculatorDelegate
+    
+    func calculatorDidUpdateDisplayText(sender: Calculator, displayText: String) {
+        primaryLabel.text = displayText
+    }
 }
 
