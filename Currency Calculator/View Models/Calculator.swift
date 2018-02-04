@@ -73,8 +73,9 @@ class Calculator: NSObject {
         case "+", "-", "*", "/":
             performMathOperation(op: operation)
             break
-        case "%": break
-            
+        case "%":
+            performPercentOperation()
+            break
         case "C":
             performClearOperation()
             break
@@ -86,6 +87,7 @@ class Calculator: NSObject {
     }
     
     // MARK: Helpers
+    
     private func evaluatedText() -> String {
         guard let firstNum = firstNumberString else {return "0"}
         guard let _ = activeOperation else {return firstNum}
@@ -122,7 +124,17 @@ class Calculator: NSObject {
             secondNumberString = NSNumber(value: -num).stringValue
         }
     }
-    
+
+    private func performPercentOperation() {
+        if activeOperation == nil {
+            if let _ = firstNumberString, let num = Float(firstNumberString!) {
+                firstNumberString = NSNumber(value: num/100.0).stringValue
+            }
+        } else if let _ = secondNumberString , let num = Float(secondNumberString!) {
+            secondNumberString = NSNumber(value: num/100.0).stringValue
+        }
+    }
+
     func calculate(firstOperand: String, secondOperand: String, operation: String) -> NSNumber? {
         guard let first = Float(firstOperand) else {return nil}
         guard let second = Float(secondOperand)  else {return nil}
