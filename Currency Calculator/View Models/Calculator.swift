@@ -41,6 +41,7 @@ class Calculator: NSObject {
 
             break
         case "+/-":
+            performSignOperation()
             break
 
         default:
@@ -110,6 +111,16 @@ class Calculator: NSObject {
     private func performMathOperation(op: String) {
         performEqualOperation()
         activeOperation = op
+    }
+    
+    private func performSignOperation() {
+        if activeOperation == nil {
+            if let _ = firstNumberString, let num = Float(firstNumberString!) {
+                firstNumberString = NSNumber(value: -num).stringValue
+            }
+        } else if let _ = secondNumberString , let num = Float(secondNumberString!) {
+            secondNumberString = NSNumber(value: -num).stringValue
+        }
     }
     
     func calculate(firstOperand: String, secondOperand: String, operation: String) -> NSNumber? {
