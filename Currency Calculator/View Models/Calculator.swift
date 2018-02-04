@@ -10,54 +10,85 @@ import UIKit
 
 class Calculator: NSObject {
     weak var delegate: CalcuatorDelegate?
-    var displayText: String {
-        get {
-            return calcutationsString
-        }
-    }
 
-    var activeOperation: String? {
-        get {
-            return nil
-        }
-    }
-
-    private var calcutationsString: String = "" {
-        didSet {
-            delegate?.calculatorDidUpdateDisplayText(sender: self, displayText: displayText)
-        }
-    }
+    private var activeOperation: String?
+    private var firstNumberString: String?
+    private var secondNumberString: String?
     
     // MARK: API
+    var displayText: String {
+        get {
+            return evaluatedText()
+        }
+    }
+
     func processDigit(_ digit: String) {
-        calcutationsString.append(digit)
+        if activeOperation == nil {
+            if let _ = firstNumberString {
+                firstNumberString?.append(digit)
+            } else {
+                firstNumberString = digit
+            }
+        } else {
+            if let _ = secondNumberString {
+                secondNumberString?.append(digit)
+            } else {
+                secondNumberString = digit
+            }
+        }
+        
+        delegate?.calculatorDidUpdateDisplayText(sender: self, displayText: displayText)
     }
     
     func processOperation(_ operation: String) {
+        
         switch operation {
-        case "=": break
-
-        case "+": break
-            
-        case "-": break
-
-        case "*": break
-
-        case "/": break
-
+        case "=":
+            performEqualOperation()
+            break
+        case "+", "-", "*", "/":
+            performMathOperation(op: operation)
+            break
         case "%": break
             
-        case "C": break
-            
+        case "C":
+            performClearOperation()
+            break
         default: break
             
         }
+        
+        delegate?.calculatorDidUpdateDisplayText(sender: self, displayText: displayText)
     }
     
     // MARK: Helpers
+    private func evaluatedText() -> String {
+        guard let firstNum = firstNumberString else {return "0"}
+        guard let _ = activeOperation else {return firstNum}
+        guard let secondNum = secondNumberString else {return firstNum}
+        
+        return secondNum
+    }
     
     private func performClearOperation() {
-        calcutationsString = ""
+        activeOperation = nil
+        firstNumberString = nil
+        secondNumberString = nil
+    }
+    
+    private func performEqualOperation() {
+        if let first = firstNumberString, let op = activeOperation, let second = secondNumberString {
+            let equation = first + op + second
+            let expression = NSExpression(format: equation)
+            let result = expression.expressionValue(with: nil, context: nil) as! NSNumber
+            performClearOperation()
+            firstNumberString = result.stringValue
+        }
+    }
+    
+    private func performMathOperation(op: String) {
+        performEqualOperation()
+        activeOperation = op
     }
 }
 
