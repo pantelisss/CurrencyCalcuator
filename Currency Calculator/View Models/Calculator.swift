@@ -23,18 +23,41 @@ class Calculator: NSObject {
     }
 
     func processDigit(_ digit: String) {
-        if activeOperation == nil {
-            if let _ = firstNumberString {
-                firstNumberString?.append(digit)
+        switch digit {
+        case ".":
+            if activeOperation == nil {
+                if firstNumberString != nil && !firstNumberString!.contains(digit) {
+                    firstNumberString?.append(digit)
+                } else if firstNumberString == nil {
+                    firstNumberString = "0" + digit
+                }
             } else {
-                firstNumberString = digit
+                if secondNumberString != nil && secondNumberString!.contains(digit) {
+                    secondNumberString?.append(digit)
+                } else if secondNumberString == nil {
+                    secondNumberString = "0" + digit
+                }
             }
-        } else {
-            if let _ = secondNumberString {
-                secondNumberString?.append(digit)
+
+            break
+        case "+/-":
+            break
+
+        default:
+            if activeOperation == nil {
+                if let _ = firstNumberString {
+                    firstNumberString?.append(digit)
+                } else {
+                    firstNumberString = digit
+                }
             } else {
-                secondNumberString = digit
+                if let _ = secondNumberString {
+                    secondNumberString?.append(digit)
+                } else {
+                    secondNumberString = digit
+                }
             }
+            break
         }
         
         delegate?.calculatorDidUpdateDisplayText(sender: self, displayText: displayText)
