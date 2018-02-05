@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class ViewController: UIViewController, CalculatorDelegate {
 
@@ -76,20 +77,22 @@ class ViewController: UIViewController, CalculatorDelegate {
     
     func refreshExchange(base: String?) {
         setErrorView(visible: false, animated: true)
-        
-        _ = Client.sharedInstance.getExchange(base: base) { [weak self] (exchange, err) in
+        MBProgressHUD.showAdded(to: view, animated: true)
+        _ = Client.sharedInstance.getExchange(base: base) { [unowned self] (exchange, err) in
+            MBProgressHUD.hide(for: self.view, animated: true)
+            
             if err != nil {
-                self?.setErrorView(visible: true, animated: true)
+                self.setErrorView(visible: true, animated: true)
                 
                 return
             }
             
-            self?.exchange = exchange
-            if self?.selectedCurrency == nil {
-              self?.selectedCurrency = exchange?.rates.keys.first
+            self.exchange = exchange
+            if self.selectedCurrency == nil {
+              self.selectedCurrency = exchange?.rates.keys.first
             }
             
-            self?.updateCurrencySection()
+            self.updateCurrencySection()
         }
     }
     
