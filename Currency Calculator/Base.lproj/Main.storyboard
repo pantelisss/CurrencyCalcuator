@@ -385,6 +385,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="equalButton" destination="UPj-fl-b3P" id="TKz-ck-tQt"/>
                         <outlet property="primaryCurrencyButton" destination="VeC-AL-0af" id="VDf-Tl-BH0"/>
                         <outlet property="primaryLabel" destination="wSd-dp-nLK" id="gDh-FZ-0rE"/>
                         <outlet property="secondaryCurrencyButton" destination="x0f-6X-nbU" id="5YU-8b-UEx"/>
@@ -399,7 +400,6 @@
                         <outletCollection property="digitButtons" destination="wb9-gD-H7Q" collectionClass="NSMutableArray" id="wZa-4T-QCa"/>
                         <outletCollection property="digitButtons" destination="tdV-pZ-3Vb" collectionClass="NSMutableArray" id="MO9-W7-6uB"/>
                         <outletCollection property="digitButtons" destination="pWD-A9-jF8" collectionClass="NSMutableArray" id="gYP-CQ-SOs"/>
-                        <outletCollection property="operationButtons" destination="UPj-fl-b3P" collectionClass="NSMutableArray" id="yZp-Nl-pxN"/>
                         <outletCollection property="operationButtons" destination="JGG-Oe-Z2E" collectionClass="NSMutableArray" id="yal-ZQ-fcg"/>
                         <outletCollection property="operationButtons" destination="gHN-ez-WsX" collectionClass="NSMutableArray" id="7U6-6F-3wv"/>
                         <outletCollection property="operationButtons" destination="N7A-O6-5WG" collectionClass="NSMutableArray" id="aZX-RQ-EUL"/>
