@@ -155,7 +155,8 @@ class ViewController: UIViewController, CalculatorDelegate {
         guard let ex = exchange else {return}
         var availableCurrencies = [ex.base]
         availableCurrencies.append(contentsOf: Array(ex.rates.keys))
-
+        availableCurrencies.sort()
+        
         let currencyPickerVC = CurrencyPickerViewController(nibName: String(describing: CurrencyPickerViewController.self), bundle: nil)
         currencyPickerVC.currencies = availableCurrencies
         currencyPickerVC.completionBlock = completion
