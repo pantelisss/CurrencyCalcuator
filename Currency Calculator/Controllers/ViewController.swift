@@ -106,6 +106,8 @@ class ViewController: UIViewController, CalculatorDelegate {
             }
         } else {
             secondaryLabel.text = "0"
+            primaryCurrencyButton.setTitle("...", for: .normal)
+            secondaryCurrencyButton.setTitle("...", for: .normal)
         }
         
         primaryLabel.text = calculator.displayText
