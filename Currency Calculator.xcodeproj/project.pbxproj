@@ -18,6 +18,8 @@
 		8D81C1F720278C3D00E4A51C /* CurrencyPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D81C1F520278C3D00E4A51C /* CurrencyPickerViewController.swift */; };
 		8D81C1F820278C3D00E4A51C /* CurrencyPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D81C1F620278C3D00E4A51C /* CurrencyPickerViewController.xib */; };
 		8D81C1FB20279E0C00E4A51C /* ActionSheetAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D81C1FA20279E0C00E4A51C /* ActionSheetAnimator.swift */; };
+		8D81C2002028438F00E4A51C /* Exchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D81C1FF2028438F00E4A51C /* Exchange.swift */; };
+		8D81C203202867A200E4A51C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D81C202202867A200E4A51C /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		8D81C1F520278C3D00E4A51C /* CurrencyPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPickerViewController.swift; sourceTree = "<group>"; };
 		8D81C1F620278C3D00E4A51C /* CurrencyPickerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CurrencyPickerViewController.xib; sourceTree = "<group>"; };
 		8D81C1FA20279E0C00E4A51C /* ActionSheetAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetAnimator.swift; sourceTree = "<group>"; };
+		8D81C1FF2028438F00E4A51C /* Exchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exchange.swift; sourceTree = "<group>"; };
+		8D81C202202867A200E4A51C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +92,8 @@
 		8D81C1D82026061800E4A51C /* Currency Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				8D81C2012028679300E4A51C /* Utils */,
+				8D81C1FC2028434700E4A51C /* Models */,
 				8D81C1F920279CE500E4A51C /* Animators */,
 				8D81C1F420278C0A00E4A51C /* Controllers */,
 				8D81C1EE2027132800E4A51C /* View Models */,
@@ -133,6 +139,22 @@
 				8D81C1FA20279E0C00E4A51C /* ActionSheetAnimator.swift */,
 			);
 			path = Animators;
+			sourceTree = "<group>";
+		};
+		8D81C1FC2028434700E4A51C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8D81C1FF2028438F00E4A51C /* Exchange.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8D81C2012028679300E4A51C /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				8D81C202202867A200E4A51C /* Extensions.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,9 +290,11 @@
 				8D81C1DC2026061900E4A51C /* ViewController.swift in Sources */,
 				8D81C1F02027136F00E4A51C /* Calculator.swift in Sources */,
 				8D81C1DA2026061800E4A51C /* AppDelegate.swift in Sources */,
+				8D81C203202867A200E4A51C /* Extensions.swift in Sources */,
 				8D81C1F720278C3D00E4A51C /* CurrencyPickerViewController.swift in Sources */,
 				8D81C1FB20279E0C00E4A51C /* ActionSheetAnimator.swift in Sources */,
 				8D81C1ED2026075400E4A51C /* Client.swift in Sources */,
+				8D81C2002028438F00E4A51C /* Exchange.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
