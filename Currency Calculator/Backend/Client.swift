@@ -81,4 +81,38 @@ class Client: NSObject {
         }
     }
 
+    /// Get the exchange response from service
+    ///
+    /// - Parameters:
+    ///   - base: The base currency
+    ///   - completion: A block which returns an Exchange object
+    /// - Returns: DataRequest, caller is able to cancel the pending request
+    func getExchange(base: String?, completion: @escaping (_ currencies: Exchange?, _ error :Error?) -> Void) -> DataRequest? {
+        var params: [String : Any]?
+        if let b = base {
+            params = ["base" : b]
+        }
+        
+        return Alamofire.request(Constants.apiUrl, method: .get, parameters: params).responseJSON { (response) in
+            switch response.result {
+            case .failure(let error):
+                debugPrint(error)
+                completion(nil, error)
+                return
+            case .success:
+                guard let json = response.result.value as? [String : Any] else {
+                    completion(nil, ClientErrors.invalidResponse)
+                    return
+                }
+                
+                guard let exchange = Exchange(dict: json) else {
+                    completion(nil, ClientErrors.invalidResponse)
+                    return
+                }
+                
+                completion(exchange, nil)
+            }
+        }
+    }
+
 }
