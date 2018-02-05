@@ -11,7 +11,6 @@ import UIKit
 class Calculator: NSObject {
     weak var delegate: CalculatorDelegate?
 
-    private var activeOperation: String?
     private var firstOperandText: NSMutableString?
     private var secondOperandText: NSMutableString?
     
@@ -19,6 +18,8 @@ class Calculator: NSObject {
     private var shouldClear: Bool = false
     
     // MARK: API
+    private(set) var activeOperation: String?
+
     var displayText: String {
         get {
             return evaluatedText()
