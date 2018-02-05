@@ -12,8 +12,8 @@ class Calculator: NSObject {
     weak var delegate: CalculatorDelegate?
 
     private var activeOperation: String?
-    private var firstOperandText: String?
-    private var secondOperandText: String?
+    private var firstOperandText: NSMutableString?
+    private var secondOperandText: NSMutableString?
     
     // MARK: API
     var displayText: String {
@@ -25,18 +25,11 @@ class Calculator: NSObject {
     func processDigit(_ digit: String) {
         switch digit {
         case ".":
-            if activeOperation == nil {
-                if firstOperandText != nil && !firstOperandText!.contains(digit) {
-                    firstOperandText?.append(digit)
-                } else if firstOperandText == nil {
-                    firstOperandText = "0" + digit
-                }
-            } else {
-                if secondOperandText != nil && secondOperandText!.contains(digit) {
-                    secondOperandText?.append(digit)
-                } else if secondOperandText == nil {
-                    secondOperandText = "0" + digit
-                }
+            guard let activeOperand = getActiveOperand() else {return}
+            if !activeOperand.contains(digit) {
+                activeOperand.append(digit)
+            } else if activeOperand.length == 0 {
+                activeOperand.append("0" + digit)
             }
 
             break
@@ -45,19 +38,8 @@ class Calculator: NSObject {
             break
 
         default:
-            if activeOperation == nil {
-                if let _ = firstOperandText {
-                    firstOperandText?.append(digit)
-                } else {
-                    firstOperandText = digit
-                }
-            } else {
-                if let _ = secondOperandText {
-                    secondOperandText?.append(digit)
-                } else {
-                    secondOperandText = digit
-                }
-            }
+            guard let activeOperand = getActiveOperand() else {return}
+            activeOperand.append(digit)
             break
         }
         
@@ -90,10 +72,10 @@ class Calculator: NSObject {
     
     private func evaluatedText() -> String {
         guard let firstNum = firstOperandText else {return "0"}
-        guard let _ = activeOperation else {return firstNum}
-        guard let secondNum = secondOperandText else {return firstNum}
+        guard let _ = activeOperation else {return firstNum as String}
+        guard let secondNum = secondOperandText else {return firstNum as String}
         
-        return secondNum
+        return secondNum as String
     }
     
     private func performClearOperation() {
@@ -104,9 +86,9 @@ class Calculator: NSObject {
     
     private func performEqualOperation() {
         if let first = firstOperandText, let op = activeOperation, let second = secondOperandText {
-            guard let result = calculate(firstOperand: first, secondOperand: second, operation: op) else {return}
+            guard let result = calculate(firstOperand: first as String, secondOperand: second as String, operation: op) else {return}
             performClearOperation()
-            firstOperandText = result.stringValue
+            firstOperandText = NSMutableString(string:result.stringValue)
         }
     }
     
@@ -116,26 +98,20 @@ class Calculator: NSObject {
     }
     
     private func performSignOperation() {
-        if activeOperation == nil {
-            if let _ = firstOperandText, let num = Float(firstOperandText!) {
-                firstOperandText = NSNumber(value: -num).stringValue
-            }
-        } else if let _ = secondOperandText , let num = Float(secondOperandText!) {
-            secondOperandText = NSNumber(value: -num).stringValue
+        guard var activeOperand = getActiveOperand() else {return}
+        if activeOperand.length > 0 , let num = Float(activeOperand as String) {
+            activeOperand = NSMutableString(string: NSNumber(value: -num).stringValue)
         }
     }
 
     private func performPercentOperation() {
-        if activeOperation == nil {
-            if let _ = firstOperandText, let num = Float(firstOperandText!) {
-                firstOperandText = NSNumber(value: num/100.0).stringValue
-            }
-        } else if let _ = secondOperandText , let num = Float(secondOperandText!) {
-            secondOperandText = NSNumber(value: num/100.0).stringValue
+        guard var activeOperand = getActiveOperand() else {return}
+        if activeOperand.length > 0, let num = Float(activeOperand as String) {
+            activeOperand = NSMutableString(string:NSNumber(value: num/100.0).stringValue)
         }
     }
 
-    func calculate(firstOperand: String, secondOperand: String, operation: String) -> NSNumber? {
+    private func calculate(firstOperand: String, secondOperand: String, operation: String) -> NSNumber? {
         guard let first = Float(firstOperand) else {return nil}
         guard let second = Float(secondOperand)  else {return nil}
         
@@ -151,6 +127,19 @@ class Calculator: NSObject {
         default:
             return NSNumber(value: 0)
         }
+    }
+    
+    private func getActiveOperand() -> NSMutableString? {
+        if activeOperation == nil {
+            if firstOperandText == nil {
+                firstOperandText = NSMutableString()
+            }
+            return firstOperandText
+        } else if secondOperandText == nil {
+            secondOperandText = NSMutableString()
+        }
+        
+        return secondOperandText
     }
 }
 
