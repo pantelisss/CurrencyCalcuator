@@ -10,7 +10,6 @@ import UIKit
 
 class CurrencyPickerViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
-    @IBOutlet weak var viewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
@@ -35,8 +34,6 @@ class CurrencyPickerViewController: UIViewController, UIPickerViewDelegate, UIPi
         // Do any additional setup after loading the view.
         pickerView.delegate = self
         pickerView.dataSource = self
-        
-        viewHeightConstraint.constant = UIScreen.main.bounds.size.height/2.0
     }
 
     override func didReceiveMemoryWarning() {

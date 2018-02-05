@@ -100,6 +100,8 @@ class ViewController: UIViewController, CalculatorDelegate {
     // MARK: Actions
     
     @IBAction func digitButtonTapped(_ sender: UIButton) {
+        sender.performTapAnimation()
+        
         guard let title = sender.title(for: .normal) else {
             return
         }
@@ -108,6 +110,8 @@ class ViewController: UIViewController, CalculatorDelegate {
     }
     
     @IBAction func operationButtonTapped(_ sender: UIButton) {
+        sender.performTapAnimation()
+        
         guard let title = sender.title(for: .normal) else {
             return
         }
