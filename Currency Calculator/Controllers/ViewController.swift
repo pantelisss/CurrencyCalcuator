@@ -60,8 +60,11 @@ class ViewController: UIViewController, CalculatorDelegate {
     
     func refreshExchange(base: String?) {
         _ = Client.sharedInstance.getExchange(base: base) { [weak self] (exchange, err) in
+            if err != nil {
+                return
+            }
+            
             self?.exchange = exchange
-            // TODO: handle case of preselected rate
             if self?.selectedCurrency == nil {
               self?.selectedCurrency = exchange?.rates.keys.first
             }
