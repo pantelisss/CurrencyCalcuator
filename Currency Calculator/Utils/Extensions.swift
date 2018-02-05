@@ -34,7 +34,7 @@ extension UIButton {
 
 extension NSMutableString {
     func safeAppend(_ str: String, maxlength: Int) {
-        if self.length == maxlength {
+        if self.length >= maxlength {
             return
         }
         
