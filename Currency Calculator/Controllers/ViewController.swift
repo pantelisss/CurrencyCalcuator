@@ -52,15 +52,20 @@ class ViewController: UIViewController, CalculatorDelegate {
             btn.layer.cornerRadius = btn.frame.size.width / 2.0
         }
         
-        primaryLabel.text = calculator.displayText
+        // Currency Section
+        updateCurrencySection()
     }
     
     // MARK: Controller Logic
     
     func refreshExchange(base: String?) {
-        Client.sharedInstance.getExchange(base: base) { [weak self] (exchange, err) in
+        _ = Client.sharedInstance.getExchange(base: base) { [weak self] (exchange, err) in
             self?.exchange = exchange
-            self?.selectedCurrency = exchange?.rates.keys.first
+            // TODO: handle case of preselected rate
+            if self?.selectedCurrency == nil {
+              self?.selectedCurrency = exchange?.rates.keys.first
+            }
+            
             self?.updateCurrencySection()
         }
     }
@@ -76,6 +81,8 @@ class ViewController: UIViewController, CalculatorDelegate {
             } else {
                 secondaryLabel.text = "0"
             }
+        } else {
+            secondaryLabel.text = "0"
         }
         
         primaryLabel.text = calculator.displayText

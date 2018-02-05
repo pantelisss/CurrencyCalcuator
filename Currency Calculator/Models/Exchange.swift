@@ -26,6 +26,10 @@ extension Exchange {
     }
     
     func getPrice(currency: String, amount: Float) -> Float {
+        if currency == base {
+            return amount
+        }
+        
         guard let price = rates[currency] else {return 0.0}
         
         return price * amount
