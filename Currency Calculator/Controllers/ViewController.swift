@@ -46,10 +46,16 @@ class ViewController: UIViewController, CalculatorDelegate {
         // Numpad Section
         for btn in digitButtons {
             btn.layer.cornerRadius = btn.frame.size.width / 2.0
+            btn.layer.shadowColor = UIColor.black.cgColor
+            btn.layer.shadowOpacity = 0.3
+            btn.layer.shadowRadius = 3.0
         }
         
         for btn in operationButtons {
             btn.layer.cornerRadius = btn.frame.size.width / 2.0
+            btn.layer.shadowColor = UIColor.black.cgColor
+            btn.layer.shadowOpacity = 0.3
+            btn.layer.shadowRadius = 3.0
         }
         
         // Currency Section
