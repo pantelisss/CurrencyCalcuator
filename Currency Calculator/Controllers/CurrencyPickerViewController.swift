@@ -16,6 +16,18 @@ class CurrencyPickerViewController: UIViewController, UIPickerViewDelegate, UIPi
     @IBOutlet weak var cancelButton: UIButton!
     
     var currencies: [String] = []
+    var completionBlock: ((_ selectedCurrency: String) -> Void)?
+    var selectedCurrency: String? {
+        didSet {
+            guard let selected = selectedCurrency else {return}
+            guard let index = currencies.index(of: selected) else {return}
+            _ = view
+            pickerView.reloadAllComponents()
+            if pickerView.numberOfRows(inComponent: 0) > index {
+                pickerView.selectRow(index, inComponent: 0, animated: false)
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +47,8 @@ class CurrencyPickerViewController: UIViewController, UIPickerViewDelegate, UIPi
     // MARK: Actions
     
     @IBAction func doneButtonTapped(_ sender: Any) {
+        completionBlock?(currencies[pickerView.selectedRow(inComponent: 0)])
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonTapped(_ sender: Any) {
