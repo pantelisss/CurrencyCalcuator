@@ -8,15 +8,26 @@
 
 import Foundation
 import UIKit
+import AudioToolbox
 
 extension UIButton {
     func performTapAnimation() {
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.1, animations: {
             self.transform = CGAffineTransform(scaleX: 0.975, y: 0.96)
         }, completion: { finished in
-            UIView.animate(withDuration: 0.2, animations: {
+            UIView.animate(withDuration: 0.1, animations: {
                 self.transform = CGAffineTransform.identity
             })
         })
+    }
+    
+    func selectOperationButton()  {
+        self.isSelected = true
+        self.backgroundColor = UIColor(named: "OperationsColorSelected")
+    }
+    
+    func deSelectOperationButton()  {
+        self.isSelected = false
+        self.backgroundColor = UIColor(named: "OperationsColor")
     }
 }

@@ -12,6 +12,7 @@ class ViewController: UIViewController, CalculatorDelegate {
 
     @IBOutlet var digitButtons: [UIButton]!
     @IBOutlet var operationButtons: [UIButton]!
+    @IBOutlet weak var equalButton: UIButton!
     @IBOutlet weak var primaryLabel: UILabel!
     @IBOutlet weak var primaryCurrencyButton: UIButton!
     @IBOutlet weak var secondaryLabel: UILabel!
@@ -58,6 +59,11 @@ class ViewController: UIViewController, CalculatorDelegate {
             btn.layer.shadowRadius = 3.0
         }
         
+        equalButton.layer.cornerRadius = equalButton.frame.size.width / 2.0
+        equalButton.layer.shadowColor = UIColor.black.cgColor
+        equalButton.layer.shadowOpacity = 0.3
+        equalButton.layer.shadowRadius = 3.0
+
         // Currency Section
         updateCurrencySection()
     }
@@ -95,6 +101,16 @@ class ViewController: UIViewController, CalculatorDelegate {
         }
         
         primaryLabel.text = calculator.displayText
+    }
+    
+    func updateNumPadState() {
+        for btn in operationButtons {
+            if calculator.activeOperation == btn.title(for: .normal) {
+                btn.selectOperationButton()
+            } else {
+                btn.deSelectOperationButton()
+            }
+        }
     }
     
     // MARK: Actions
@@ -153,6 +169,7 @@ class ViewController: UIViewController, CalculatorDelegate {
     
     func calculatorDidUpdateDisplayText(sender: Calculator, displayText: String) {
         updateCurrencySection()
+        updateNumPadState()
     }
 }
 
