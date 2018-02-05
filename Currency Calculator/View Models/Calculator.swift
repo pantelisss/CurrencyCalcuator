@@ -85,7 +85,9 @@ class Calculator: NSObject {
     }
     
     private func performEqualOperation() {
-        if let first = firstOperandText, let op = activeOperation, let second = secondOperandText {
+        guard let first = firstOperandText, let op = activeOperation, let second = secondOperandText else {return}
+        
+        if first.length > 0, second.length > 0 {
             guard let result = calculate(firstOperand: first as String, secondOperand: second as String, operation: op) else {return}
             performClearOperation()
             firstOperandText = NSMutableString(string:result.stringValue)
@@ -94,7 +96,9 @@ class Calculator: NSObject {
     
     private func performMathOperation(op: String) {
         performEqualOperation()
-        activeOperation = op
+        if firstOperandText != nil {
+            activeOperation = op
+        }
     }
     
     private func performSignOperation() {
@@ -130,10 +134,10 @@ class Calculator: NSObject {
     }
     
     private func getActiveOperand() -> NSMutableString? {
-        if activeOperation == nil {
-            if firstOperandText == nil {
-                firstOperandText = NSMutableString()
-            }
+        if firstOperandText == nil {
+            firstOperandText = NSMutableString()
+            return firstOperandText
+        } else if activeOperation == nil {
             return firstOperandText
         } else if secondOperandText == nil {
             secondOperandText = NSMutableString()
