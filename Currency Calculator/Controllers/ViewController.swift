@@ -17,6 +17,7 @@ class ViewController: UIViewController, CalculatorDelegate {
     @IBOutlet weak var primaryCurrencyButton: UIButton!
     @IBOutlet weak var secondaryLabel: UILabel!
     @IBOutlet weak var secondaryCurrencyButton: UIButton!
+    @IBOutlet weak var errorView: UIView!
     
     private let calculator = Calculator()
     private let animator = ActionSheetAnimator()
@@ -68,13 +69,18 @@ class ViewController: UIViewController, CalculatorDelegate {
         primaryLabel.adjustsFontSizeToFitWidth = true
         secondaryLabel.adjustsFontSizeToFitWidth = true
         updateCurrencySection()
+        setErrorView(visible: false, animated: false)
     }
     
     // MARK: Controller Logic
     
     func refreshExchange(base: String?) {
+        setErrorView(visible: false, animated: true)
+        
         _ = Client.sharedInstance.getExchange(base: base) { [weak self] (exchange, err) in
             if err != nil {
+                self?.setErrorView(visible: true, animated: true)
+                
                 return
             }
             
@@ -151,6 +157,10 @@ class ViewController: UIViewController, CalculatorDelegate {
         }
     }
     
+    @IBAction func errorLabelTapped(_ sender: Any) {
+        refreshExchange(base: nil)
+    }
+    
     // MARK: Helpers
     
     func presentCurrencyPicker(selectedCurrency: String?, completion: @escaping (_ selectedCurrency: String) -> Void) {
@@ -166,6 +176,20 @@ class ViewController: UIViewController, CalculatorDelegate {
         currencyPickerVC.transitioningDelegate = animator
         currencyPickerVC.modalPresentationStyle = .custom
         present(currencyPickerVC, animated: true, completion: nil)
+    }
+    
+    func setErrorView(visible: Bool, animated: Bool) {
+        let alpha: CGFloat = visible ? 1.0 : 0.0
+        
+        if animated {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.errorView.alpha = alpha
+            }, completion: { (finished) in
+                
+            })
+        } else {
+            errorView.alpha = alpha
+        }
     }
     
     // MARK: CalculatorDelegate
