@@ -15,6 +15,9 @@ class Calculator: NSObject {
     private var firstOperandText: NSMutableString?
     private var secondOperandText: NSMutableString?
     
+    // MARK: Flags
+    private var shouldClear: Bool = false
+    
     // MARK: API
     var displayText: String {
         get {
@@ -23,6 +26,10 @@ class Calculator: NSObject {
     }
 
     func processDigit(_ digit: String) {
+        if shouldClear {
+            performClearOperation()
+        }
+        
         switch digit {
         case ".":
             guard let activeOperand = getActiveOperand() else {return}
@@ -48,9 +55,12 @@ class Calculator: NSObject {
     
     func processOperation(_ operation: String) {
         
+        shouldClear = false
+        
         switch operation {
         case "=":
             performEqualOperation()
+            shouldClear = true
             break
         case "+", "-", "*", "/":
             performMathOperation(op: operation)
@@ -82,6 +92,7 @@ class Calculator: NSObject {
         activeOperation = nil
         firstOperandText = nil
         secondOperandText = nil
+        shouldClear = false
     }
     
     private func performEqualOperation() {
