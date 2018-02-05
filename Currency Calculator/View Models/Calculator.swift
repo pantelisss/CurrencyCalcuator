@@ -8,6 +8,10 @@
 
 import UIKit
 
+fileprivate struct Constants {
+    static let maxOperandLength = 10
+}
+
 class Calculator: NSObject {
     weak var delegate: CalculatorDelegate?
 
@@ -35,9 +39,9 @@ class Calculator: NSObject {
         case ".":
             guard let activeOperand = getActiveOperand() else {return}
             if !activeOperand.contains(digit) {
-                activeOperand.append(digit)
+                activeOperand.safeAppend(digit, maxlength: Constants.maxOperandLength)
             } else if activeOperand.length == 0 {
-                activeOperand.append("0" + digit)
+                activeOperand.safeAppend("0" + digit, maxlength: Constants.maxOperandLength)
             }
 
             break
@@ -47,7 +51,7 @@ class Calculator: NSObject {
 
         default:
             guard let activeOperand = getActiveOperand() else {return}
-            activeOperand.append(digit)
+            activeOperand.safeAppend(digit, maxlength: Constants.maxOperandLength)
             break
         }
         

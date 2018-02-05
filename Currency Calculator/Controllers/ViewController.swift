@@ -65,6 +65,8 @@ class ViewController: UIViewController, CalculatorDelegate {
         equalButton.layer.shadowRadius = 3.0
 
         // Currency Section
+        primaryLabel.adjustsFontSizeToFitWidth = true
+        secondaryLabel.adjustsFontSizeToFitWidth = true
         updateCurrencySection()
     }
     

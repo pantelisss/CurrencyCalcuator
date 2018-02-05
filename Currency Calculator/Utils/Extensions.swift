@@ -31,3 +31,13 @@ extension UIButton {
         self.backgroundColor = UIColor(named: "OperationsColor")
     }
 }
+
+extension NSMutableString {
+    func safeAppend(_ str: String, maxlength: Int) {
+        if self.length == maxlength {
+            return
+        }
+        
+        self.append(str)
+    }
+}
