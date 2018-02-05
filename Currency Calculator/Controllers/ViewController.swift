@@ -137,17 +137,13 @@ class ViewController: UIViewController, CalculatorDelegate {
     
     @IBAction func primaryCurrencyButtonTapped(_ sender: Any) {
         guard let ex = exchange else {return}
-        var availableCurrencies = [ex.base]
-        availableCurrencies.append(contentsOf: Array(ex.rates.keys))
-        presentCurrencyPicker(withCurrencies: availableCurrencies, selectedCurrency: ex.base) { [weak self] (newlySelectedCurr) in
+        presentCurrencyPicker(selectedCurrency: ex.base) { [weak self] (newlySelectedCurr) in
             self?.refreshExchange(base: newlySelectedCurr)
         }
     }
 
     @IBAction func secondaryCurrencyButtonTapped(_ sender: Any) {
-        guard let ex = exchange else {return}
-        let availableCurrencies = Array(ex.rates.keys)
-        presentCurrencyPicker(withCurrencies: availableCurrencies, selectedCurrency: selectedCurrency) { [weak self] (newlySelectedCurr) in
+        presentCurrencyPicker(selectedCurrency: selectedCurrency) { [weak self] (newlySelectedCurr) in
             self?.selectedCurrency = newlySelectedCurr
             self?.updateCurrencySection()
         }
@@ -155,9 +151,13 @@ class ViewController: UIViewController, CalculatorDelegate {
     
     // MARK: Helpers
     
-    func presentCurrencyPicker(withCurrencies currencies: [String], selectedCurrency: String?, completion: @escaping (_ selectedCurrency: String) -> Void) {
+    func presentCurrencyPicker(selectedCurrency: String?, completion: @escaping (_ selectedCurrency: String) -> Void) {
+        guard let ex = exchange else {return}
+        var availableCurrencies = [ex.base]
+        availableCurrencies.append(contentsOf: Array(ex.rates.keys))
+
         let currencyPickerVC = CurrencyPickerViewController(nibName: String(describing: CurrencyPickerViewController.self), bundle: nil)
-        currencyPickerVC.currencies = currencies
+        currencyPickerVC.currencies = availableCurrencies
         currencyPickerVC.completionBlock = completion
         currencyPickerVC.selectedCurrency = selectedCurrency
         currencyPickerVC.transitioningDelegate = animator
