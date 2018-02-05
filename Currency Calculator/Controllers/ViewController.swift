@@ -19,6 +19,8 @@ class ViewController: UIViewController, CalculatorDelegate {
     
     private let calculator = Calculator()
     private let animator = ActionSheetAnimator()
+    private var exchange: Exchange?
+    private var selectedCurrency: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +28,7 @@ class ViewController: UIViewController, CalculatorDelegate {
         
         calculator.delegate = self
         setupUI()
+        refreshExchange(base: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,12 +43,39 @@ class ViewController: UIViewController, CalculatorDelegate {
         // radius depends on buttons size
         view.layoutIfNeeded()
         
+        // Numpad Section
         for btn in digitButtons {
             btn.layer.cornerRadius = btn.frame.size.width / 2.0
         }
         
         for btn in operationButtons {
             btn.layer.cornerRadius = btn.frame.size.width / 2.0
+        }
+        
+        primaryLabel.text = calculator.displayText
+    }
+    
+    // MARK: Controller Logic
+    
+    func refreshExchange(base: String?) {
+        Client.sharedInstance.getExchange(base: base) { [weak self] (exchange, err) in
+            self?.exchange = exchange
+            self?.selectedCurrency = exchange?.rates.keys.first
+            self?.updateCurrencySection()
+        }
+    }
+    
+    func updateCurrencySection() {
+        if let ex = exchange, let selected = selectedCurrency {
+            primaryCurrencyButton.setTitle(ex.base, for: .normal)
+            secondaryCurrencyButton.setTitle(selected, for: .normal)
+            
+            if let amount = Float(calculator.displayText) {
+                let price = ex.getPrice(currency: selected, amount: amount)
+                secondaryLabel.text = String(price)
+            } else {
+                secondaryLabel.text = "0"
+            }
         }
         
         primaryLabel.text = calculator.displayText
@@ -82,7 +112,7 @@ class ViewController: UIViewController, CalculatorDelegate {
     // MARK: CalculatorDelegate
     
     func calculatorDidUpdateDisplayText(sender: Calculator, displayText: String) {
-        primaryLabel.text = displayText
+        updateCurrencySection()
     }
 }
 
