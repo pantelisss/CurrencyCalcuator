@@ -9,6 +9,10 @@
 import UIKit
 import MBProgressHUD
 
+fileprivate struct Constants {
+    static let currencyButtonErrorText = "..."
+}
+
 class ViewController: UIViewController, CalculatorDelegate {
 
     @IBOutlet var digitButtons: [UIButton]!
@@ -109,8 +113,8 @@ class ViewController: UIViewController, CalculatorDelegate {
             }
         } else {
             secondaryLabel.text = "0"
-            primaryCurrencyButton.setTitle("...", for: .normal)
-            secondaryCurrencyButton.setTitle("...", for: .normal)
+            primaryCurrencyButton.setTitle(Constants.currencyButtonErrorText, for: .normal)
+            secondaryCurrencyButton.setTitle(Constants.currencyButtonErrorText, for: .normal)
         }
         
         primaryLabel.text = calculator.displayText
