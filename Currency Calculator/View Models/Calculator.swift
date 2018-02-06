@@ -22,14 +22,21 @@ class Calculator: NSObject {
     private var shouldClear: Bool = false
     
     // MARK: API
+    
+    /// The active math operation (+,-,/,*)
     private(set) var activeOperation: String?
 
+    /// The text that should be displayed on calculator
     var displayText: String {
         get {
             return evaluatedText()
         }
     }
 
+    
+    /// Call this method every time user taps digit from numpad
+    ///
+    /// - Parameter digit: The tapped digit
     func processDigit(_ digit: String) {
         if shouldClear {
             performClearOperation()
@@ -58,6 +65,9 @@ class Calculator: NSObject {
         delegate?.calculatorDidUpdateDisplayText(sender: self, displayText: displayText)
     }
     
+    /// Call this method every time user taps an operation button
+    ///
+    /// - Parameter operation: The tapped operation
     func processOperation(_ operation: String) {
         
         shouldClear = false
@@ -85,6 +95,9 @@ class Calculator: NSObject {
     
     // MARK: Helpers
     
+    /// Generates the text that should be dislplayed
+    ///
+    /// - Returns: The generated text
     private func evaluatedText() -> String {
         guard let firstNum = firstOperandText else {return "0"}
         guard let _ = activeOperation else {return firstNum as String}
@@ -93,6 +106,7 @@ class Calculator: NSObject {
         return secondNum as String
     }
     
+    /// Clear calculator state, just like when user taps 'C'
     private func performClearOperation() {
         activeOperation = nil
         firstOperandText = nil
@@ -100,6 +114,7 @@ class Calculator: NSObject {
         shouldClear = false
     }
     
+    /// Evaluate curent statu, just like when user taps '='
     private func performEqualOperation() {
         guard let first = firstOperandText, let op = activeOperation, let second = secondOperandText else {return}
         
@@ -110,6 +125,9 @@ class Calculator: NSObject {
         }
     }
     
+    /// Do the appropriate actions and udpate the active operation
+    ///
+    /// - Parameter op: The newly tapped operation
     private func performMathOperation(op: String) {
         performEqualOperation()
         if firstOperandText != nil {
@@ -117,6 +135,7 @@ class Calculator: NSObject {
         }
     }
     
+    /// Inverts the current sign
     private func performSignOperation() {
         guard var activeOperand = getActiveOperand() else {return}
         if activeOperand.length > 0 , let num = Float(activeOperand as String) {
@@ -124,6 +143,7 @@ class Calculator: NSObject {
         }
     }
 
+    /// Divides the active operand with 100
     private func performPercentOperation() {
         guard var activeOperand = getActiveOperand() else {return}
         if activeOperand.length > 0, let num = Float(activeOperand as String) {
@@ -131,6 +151,14 @@ class Calculator: NSObject {
         }
     }
 
+    
+    /// Performs the appropriate math operation
+    ///
+    /// - Parameters:
+    ///   - firstOperand: The first operand string
+    ///   - secondOperand: The second operand string
+    ///   - operation: The math operation
+    /// - Returns: A NSNumber objec with the result
     private func calculate(firstOperand: String, secondOperand: String, operation: String) -> NSNumber? {
         guard let first = Float(firstOperand) else {return nil}
         guard let second = Float(secondOperand)  else {return nil}
@@ -149,6 +177,9 @@ class Calculator: NSObject {
         }
     }
     
+    /// Retrieve the active operand pointer (firstOperandText or secondOperandText)
+    ///
+    /// - Returns: The active operand
     private func getActiveOperand() -> NSMutableString? {
         if firstOperandText == nil {
             firstOperandText = NSMutableString()
