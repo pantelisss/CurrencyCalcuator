@@ -93,11 +93,11 @@
 			isa = PBXGroup;
 			children = (
 				8D81C2012028679300E4A51C /* Utils */,
-				8D81C1FC2028434700E4A51C /* Models */,
 				8D81C1F920279CE500E4A51C /* Animators */,
-				8D81C1F420278C0A00E4A51C /* Controllers */,
-				8D81C1EE2027132800E4A51C /* View Models */,
 				8D81C1EB2026072E00E4A51C /* Backend */,
+				8D81C1FC2028434700E4A51C /* Models */,
+				8D81C1EE2027132800E4A51C /* View Models */,
+				8D81C1F420278C0A00E4A51C /* Controllers */,
 				8D81C1D92026061800E4A51C /* AppDelegate.swift */,
 				8D81C1DD2026061900E4A51C /* Main.storyboard */,
 				8D81C1E02026061900E4A51C /* Assets.xcassets */,
@@ -255,10 +255,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Currency Calculator/Pods-Currency Calculator-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -439,7 +441,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pgiazitsis.Currency-Calculator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -455,7 +457,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pgiazitsis.Currency-Calculator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

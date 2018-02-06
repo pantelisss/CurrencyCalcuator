@@ -7,15 +7,18 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class ViewController: UIViewController, CalculatorDelegate {
 
     @IBOutlet var digitButtons: [UIButton]!
     @IBOutlet var operationButtons: [UIButton]!
+    @IBOutlet weak var equalButton: UIButton!
     @IBOutlet weak var primaryLabel: UILabel!
     @IBOutlet weak var primaryCurrencyButton: UIButton!
     @IBOutlet weak var secondaryLabel: UILabel!
     @IBOutlet weak var secondaryCurrencyButton: UIButton!
+    @IBOutlet weak var errorView: UIView!
     
     private let calculator = Calculator()
     private let animator = ActionSheetAnimator()
@@ -58,24 +61,38 @@ class ViewController: UIViewController, CalculatorDelegate {
             btn.layer.shadowRadius = 3.0
         }
         
+        equalButton.layer.cornerRadius = equalButton.frame.size.width / 2.0
+        equalButton.layer.shadowColor = UIColor.black.cgColor
+        equalButton.layer.shadowOpacity = 0.3
+        equalButton.layer.shadowRadius = 3.0
+
         // Currency Section
+        primaryLabel.adjustsFontSizeToFitWidth = true
+        secondaryLabel.adjustsFontSizeToFitWidth = true
         updateCurrencySection()
+        setErrorView(visible: false, animated: false)
     }
     
     // MARK: Controller Logic
     
     func refreshExchange(base: String?) {
-        _ = Client.sharedInstance.getExchange(base: base) { [weak self] (exchange, err) in
+        setErrorView(visible: false, animated: true)
+        MBProgressHUD.showAdded(to: view, animated: true)
+        _ = Client.sharedInstance.getExchange(base: base) { [unowned self] (exchange, err) in
+            MBProgressHUD.hide(for: self.view, animated: true)
+            
             if err != nil {
+                self.setErrorView(visible: true, animated: true)
+                
                 return
             }
             
-            self?.exchange = exchange
-            if self?.selectedCurrency == nil {
-              self?.selectedCurrency = exchange?.rates.keys.first
+            self.exchange = exchange
+            if self.selectedCurrency == nil {
+              self.selectedCurrency = exchange?.rates.keys.first
             }
             
-            self?.updateCurrencySection()
+            self.updateCurrencySection()
         }
     }
     
@@ -92,9 +109,21 @@ class ViewController: UIViewController, CalculatorDelegate {
             }
         } else {
             secondaryLabel.text = "0"
+            primaryCurrencyButton.setTitle("...", for: .normal)
+            secondaryCurrencyButton.setTitle("...", for: .normal)
         }
         
         primaryLabel.text = calculator.displayText
+    }
+    
+    func updateNumPadState() {
+        for btn in operationButtons {
+            if calculator.activeOperation == btn.title(for: .normal) {
+                btn.selectOperationButton()
+            } else {
+                btn.deSelectOperationButton()
+            }
+        }
     }
     
     // MARK: Actions
@@ -121,27 +150,32 @@ class ViewController: UIViewController, CalculatorDelegate {
     
     @IBAction func primaryCurrencyButtonTapped(_ sender: Any) {
         guard let ex = exchange else {return}
-        var availableCurrencies = [ex.base]
-        availableCurrencies.append(contentsOf: Array(ex.rates.keys))
-        presentCurrencyPicker(withCurrencies: availableCurrencies, selectedCurrency: ex.base) { [weak self] (newlySelectedCurr) in
+        presentCurrencyPicker(selectedCurrency: ex.base) { [weak self] (newlySelectedCurr) in
             self?.refreshExchange(base: newlySelectedCurr)
         }
     }
 
     @IBAction func secondaryCurrencyButtonTapped(_ sender: Any) {
-        guard let ex = exchange else {return}
-        let availableCurrencies = Array(ex.rates.keys)
-        presentCurrencyPicker(withCurrencies: availableCurrencies, selectedCurrency: selectedCurrency) { [weak self] (newlySelectedCurr) in
+        presentCurrencyPicker(selectedCurrency: selectedCurrency) { [weak self] (newlySelectedCurr) in
             self?.selectedCurrency = newlySelectedCurr
             self?.updateCurrencySection()
         }
     }
     
+    @IBAction func errorLabelTapped(_ sender: Any) {
+        refreshExchange(base: nil)
+    }
+    
     // MARK: Helpers
     
-    func presentCurrencyPicker(withCurrencies currencies: [String], selectedCurrency: String?, completion: @escaping (_ selectedCurrency: String) -> Void) {
+    func presentCurrencyPicker(selectedCurrency: String?, completion: @escaping (_ selectedCurrency: String) -> Void) {
+        guard let ex = exchange else {return}
+        var availableCurrencies = [ex.base]
+        availableCurrencies.append(contentsOf: Array(ex.rates.keys))
+        availableCurrencies.sort()
+        
         let currencyPickerVC = CurrencyPickerViewController(nibName: String(describing: CurrencyPickerViewController.self), bundle: nil)
-        currencyPickerVC.currencies = currencies
+        currencyPickerVC.currencies = availableCurrencies
         currencyPickerVC.completionBlock = completion
         currencyPickerVC.selectedCurrency = selectedCurrency
         currencyPickerVC.transitioningDelegate = animator
@@ -149,10 +183,25 @@ class ViewController: UIViewController, CalculatorDelegate {
         present(currencyPickerVC, animated: true, completion: nil)
     }
     
+    func setErrorView(visible: Bool, animated: Bool) {
+        let alpha: CGFloat = visible ? 1.0 : 0.0
+        
+        if animated {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.errorView.alpha = alpha
+            }, completion: { (finished) in
+                
+            })
+        } else {
+            errorView.alpha = alpha
+        }
+    }
+    
     // MARK: CalculatorDelegate
     
     func calculatorDidUpdateDisplayText(sender: Calculator, displayText: String) {
         updateCurrencySection()
+        updateNumPadState()
     }
 }
 

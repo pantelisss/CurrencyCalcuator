@@ -8,35 +8,47 @@
 
 import UIKit
 
+fileprivate struct Constants {
+    static let maxOperandLength = 10
+}
+
 class Calculator: NSObject {
     weak var delegate: CalculatorDelegate?
 
-    private var activeOperation: String?
-    private var firstNumberString: String?
-    private var secondNumberString: String?
+    private var firstOperandText: NSMutableString?
+    private var secondOperandText: NSMutableString?
+    
+    // MARK: Flags
+    private var shouldClear: Bool = false
     
     // MARK: API
+    
+    /// The active math operation (+,-,/,*)
+    private(set) var activeOperation: String?
+
+    /// The text that should be displayed on calculator
     var displayText: String {
         get {
             return evaluatedText()
         }
     }
 
+    
+    /// Call this method every time user taps digit from numpad
+    ///
+    /// - Parameter digit: The tapped digit
     func processDigit(_ digit: String) {
+        if shouldClear {
+            performClearOperation()
+        }
+        
         switch digit {
         case ".":
-            if activeOperation == nil {
-                if firstNumberString != nil && !firstNumberString!.contains(digit) {
-                    firstNumberString?.append(digit)
-                } else if firstNumberString == nil {
-                    firstNumberString = "0" + digit
-                }
-            } else {
-                if secondNumberString != nil && secondNumberString!.contains(digit) {
-                    secondNumberString?.append(digit)
-                } else if secondNumberString == nil {
-                    secondNumberString = "0" + digit
-                }
+            guard let activeOperand = getActiveOperand() else {return}
+            if !activeOperand.contains(digit) {
+                activeOperand.safeAppend(digit, maxlength: Constants.maxOperandLength)
+            } else if activeOperand.length == 0 {
+                activeOperand.safeAppend("0" + digit, maxlength: Constants.maxOperandLength)
             }
 
             break
@@ -45,30 +57,25 @@ class Calculator: NSObject {
             break
 
         default:
-            if activeOperation == nil {
-                if let _ = firstNumberString {
-                    firstNumberString?.append(digit)
-                } else {
-                    firstNumberString = digit
-                }
-            } else {
-                if let _ = secondNumberString {
-                    secondNumberString?.append(digit)
-                } else {
-                    secondNumberString = digit
-                }
-            }
+            guard let activeOperand = getActiveOperand() else {return}
+            activeOperand.safeAppend(digit, maxlength: Constants.maxOperandLength)
             break
         }
         
         delegate?.calculatorDidUpdateDisplayText(sender: self, displayText: displayText)
     }
     
+    /// Call this method every time user taps an operation button
+    ///
+    /// - Parameter operation: The tapped operation
     func processOperation(_ operation: String) {
+        
+        shouldClear = false
         
         switch operation {
         case "=":
             performEqualOperation()
+            shouldClear = true
             break
         case "+", "-", "*", "/":
             performMathOperation(op: operation)
@@ -88,54 +95,71 @@ class Calculator: NSObject {
     
     // MARK: Helpers
     
+    /// Generates the text that should be dislplayed
+    ///
+    /// - Returns: The generated text
     private func evaluatedText() -> String {
-        guard let firstNum = firstNumberString else {return "0"}
-        guard let _ = activeOperation else {return firstNum}
-        guard let secondNum = secondNumberString else {return firstNum}
+        guard let firstNum = firstOperandText else {return "0"}
+        guard let _ = activeOperation else {return firstNum as String}
+        guard let secondNum = secondOperandText else {return firstNum as String}
         
-        return secondNum
+        return secondNum as String
     }
     
+    /// Clear calculator state, just like when user taps 'C'
     private func performClearOperation() {
         activeOperation = nil
-        firstNumberString = nil
-        secondNumberString = nil
+        firstOperandText = nil
+        secondOperandText = nil
+        shouldClear = false
     }
     
+    /// Evaluate curent statu, just like when user taps '='
     private func performEqualOperation() {
-        if let first = firstNumberString, let op = activeOperation, let second = secondNumberString {
-            guard let result = calculate(firstOperand: first, secondOperand: second, operation: op) else {return}
+        guard let first = firstOperandText, let op = activeOperation, let second = secondOperandText else {return}
+        
+        if first.length > 0, second.length > 0 {
+            guard let result = calculate(firstOperand: first as String, secondOperand: second as String, operation: op) else {return}
             performClearOperation()
-            firstNumberString = result.stringValue
+            firstOperandText = NSMutableString(string:result.stringValue)
         }
     }
     
+    /// Do the appropriate actions and udpate the active operation
+    ///
+    /// - Parameter op: The newly tapped operation
     private func performMathOperation(op: String) {
         performEqualOperation()
-        activeOperation = op
+        if firstOperandText != nil {
+            activeOperation = op
+        }
     }
     
+    /// Inverts the current sign
     private func performSignOperation() {
-        if activeOperation == nil {
-            if let _ = firstNumberString, let num = Float(firstNumberString!) {
-                firstNumberString = NSNumber(value: -num).stringValue
-            }
-        } else if let _ = secondNumberString , let num = Float(secondNumberString!) {
-            secondNumberString = NSNumber(value: -num).stringValue
+        guard var activeOperand = getActiveOperand() else {return}
+        if activeOperand.length > 0 , let num = Float(activeOperand as String) {
+            activeOperand = NSMutableString(string: NSNumber(value: -num).stringValue)
         }
     }
 
+    /// Divides the active operand with 100
     private func performPercentOperation() {
-        if activeOperation == nil {
-            if let _ = firstNumberString, let num = Float(firstNumberString!) {
-                firstNumberString = NSNumber(value: num/100.0).stringValue
-            }
-        } else if let _ = secondNumberString , let num = Float(secondNumberString!) {
-            secondNumberString = NSNumber(value: num/100.0).stringValue
+        guard var activeOperand = getActiveOperand() else {return}
+        if activeOperand.length > 0, let num = Float(activeOperand as String) {
+            activeOperand = NSMutableString(string:NSNumber(value: num/100.0).stringValue)
         }
     }
 
-    func calculate(firstOperand: String, secondOperand: String, operation: String) -> NSNumber? {
+    
+    /// Performs the appropriate math operation
+    ///
+    /// - Parameters:
+    ///   - firstOperand: The first operand string
+    ///   - secondOperand: The second operand string
+    ///   - operation: The math operation
+    /// - Returns: A NSNumber objec with the result
+    private func calculate(firstOperand: String, secondOperand: String, operation: String) -> NSNumber? {
         guard let first = Float(firstOperand) else {return nil}
         guard let second = Float(secondOperand)  else {return nil}
         
@@ -151,6 +175,22 @@ class Calculator: NSObject {
         default:
             return NSNumber(value: 0)
         }
+    }
+    
+    /// Retrieve the active operand pointer (firstOperandText or secondOperandText)
+    ///
+    /// - Returns: The active operand
+    private func getActiveOperand() -> NSMutableString? {
+        if firstOperandText == nil {
+            firstOperandText = NSMutableString()
+            return firstOperandText
+        } else if activeOperation == nil {
+            return firstOperandText
+        } else if secondOperandText == nil {
+            secondOperandText = NSMutableString()
+        }
+        
+        return secondOperandText
     }
 }
 

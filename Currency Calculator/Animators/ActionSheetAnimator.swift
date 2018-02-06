@@ -52,7 +52,7 @@ class ActionSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning, UIVi
             var finalFrame = fromViewController.view.frame
             finalFrame.origin.y = finalFrame.size.height
             
-            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.0, options: .curveEaseIn, animations: { [weak self] in
+            UIView.animate(withDuration: transitionDuration(using: transitionContext), delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.0, options: .curveEaseIn, animations: { [weak self] in
                 fromViewController.view.frame = finalFrame
                 self?.gradientView.alpha = 0.0
             }, completion: { [weak self] (finished) in

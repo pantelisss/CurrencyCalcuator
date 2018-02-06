@@ -7,5 +7,6 @@ target 'Currency Calculator' do
 
   # Pods for Currency Calculator
   pod 'Alamofire'
+  pod 'MBProgressHUD'
 
 end
