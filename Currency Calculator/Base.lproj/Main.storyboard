@@ -342,11 +342,14 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C2O-Xu-NJr">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="111.5"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="91.5"/>
                                 <subviews>
                                     <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="An error occured,  tap here to refresh the currencies." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vtu-2f-JFD">
-                                        <rect key="frame" x="20" y="37" width="280" height="38.5"/>
+                                        <rect key="frame" x="20" y="27" width="280" height="38.5"/>
                                         <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="38.5" id="oGH-Bk-ACh"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" white="0.0" alpha="0.60054005870000005" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -357,6 +360,8 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="vtu-2f-JFD" secondAttribute="bottom" id="DAw-Vy-Y9h"/>
+                                    <constraint firstItem="vtu-2f-JFD" firstAttribute="top" relation="greaterThanOrEqual" secondItem="C2O-Xu-NJr" secondAttribute="top" id="Pe4-oZ-ytj"/>
                                     <constraint firstAttribute="trailing" secondItem="vtu-2f-JFD" secondAttribute="trailing" constant="20" id="ZDj-Ci-JCC"/>
                                     <constraint firstItem="vtu-2f-JFD" firstAttribute="leading" secondItem="C2O-Xu-NJr" secondAttribute="leading" constant="20" id="hCc-WR-s9z"/>
                                     <constraint firstItem="vtu-2f-JFD" firstAttribute="centerX" secondItem="C2O-Xu-NJr" secondAttribute="centerX" id="n6Y-Aw-Yju"/>
@@ -368,7 +373,7 @@
                         <constraints>
                             <constraint firstItem="ZOQ-lO-boM" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="2k1-4G-T2v"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="gTI-UI-buL" secondAttribute="trailing" constant="20" id="2o4-gj-llv"/>
-                            <constraint firstItem="C2O-Xu-NJr" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Abv-bb-Pl6"/>
+                            <constraint firstItem="C2O-Xu-NJr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Abv-bb-Pl6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="gTI-UI-buL" secondAttribute="bottom" constant="20" id="HGp-z9-rzc"/>
                             <constraint firstItem="pKC-YU-JOU" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="ITe-Nc-tb5"/>
                             <constraint firstItem="C2O-Xu-NJr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="LQy-fa-VAT"/>
