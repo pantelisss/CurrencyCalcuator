@@ -20,7 +20,7 @@ class CurrencyPickerViewController: UIViewController, UIPickerViewDelegate, UIPi
         didSet {
             guard let selected = selectedCurrency else {return}
             guard let index = currencies.index(of: selected) else {return}
-            _ = view
+            _ = view    // Force load view in case isn't loaded yet
             pickerView.reloadAllComponents()
             if pickerView.numberOfRows(inComponent: 0) > index {
                 pickerView.selectRow(index, inComponent: 0, animated: false)
